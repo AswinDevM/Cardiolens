@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVD Prediction</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0; 
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(14, 5, 5, 0.7) 100%), url('../static/eye.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    min-height: 100vh;
+    color: white; 
+      }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+ssssss
+        #image-preview {
+            margin-top: 20px;
+            max-width: 300px;
+            max-height:200px; 
+            margin-left: 20px;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+        
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 80%;
+        }
+
+        .form-container {
+            flex: 1;
+            background-color: rgba(255, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        a {
+            margin-left: 20px; /* Set margin for the h1 element */
+            font-size:100px;
+            text-shadow: 2px 2px 4px rgba(3, 0, 0, 0.925);
+            
+            text-shadow: 2px 2px 4px rgba(12, 8, 9, 0.7); 
+            margin-bottom: 20px; 
+            
+        }
+
+        #upload-form {
+            display: flex;
+            margin-left: 20px;
+            align-items: center;
+        }
+
+       #file-input {
+            padding: 10px;
+            margin-right: 10px; 
+            border: 1px solid white;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            width: 250%;
+            height: auto;
+            border-radius: 5%;
+        }
+        
+#file-input {
+    padding: 1px;
+    border: 10px solid rgb(184, 53, 70);
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    width: 250%;
+   height:auto;
+    border-radius: 5%;
+}
+#predict-button {
+    padding: 10px;
+    background-color: rgb(12, 150, 12);
+    color: rgb(179, 132, 132);
+    border: none;
+    cursor: pointer;
+    border-radius: 1000%;
+    }
+.file-input:hover, .predict-button:hover {
+    opacity: 0.8; /* Adjust the opacity as needed */
+    }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #744a4a;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+            border-radius:10%;
+        }
+    </style>
+</head>
+<body bgcolor="red">
+    <a>CARDIO VASCULAR DISEASE PREDICTION</a>
+    <form id="upload-form">
+        <input type="file" name="file" accept="image/*" id="file-input" required>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <div id="result"></div>
+    <img id="image-preview" src="" alt="Uploaded Image" style="display: none;">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function predict() {
+            var formData = new FormData(document.getElementById('upload-form'));
+
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.error) {
+                        $('#result').html('<p style="color: red;">Error: ' + data.error + '</p>');
+                        $('#image-preview').hide();
+                    } else {
+                        $('#result').html('<p style="color: green;">Prediction: ' + data.result + '</p>');
+                        $('#image-preview').attr('src', URL.createObjectURL($('#file-input')[0].files[0])).show();
+                    }
+                },
+                error: function () {
+                    $('#result').html('<p style="color: red;">An error occurred during the prediction.</p>');
+                    $('#image-preview').hide();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+

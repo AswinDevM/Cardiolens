@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaf Disease Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-image:url('../static/pexels-photo-5340280.webp');
+            background-size: 100%;
+            background-repeat: no-repeat ;
+          
+           
+   
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #image-preview {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body bgcolor="red">
+    <h1>Heart Attack Prediction</h1>
+    <form id="upload-form">
+        <input type="file" name="file" accept="image/*" id="file-input" required>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <div id="result"></div>
+    <img id="image-preview" src="" alt="Uploaded Image" style="display: none;">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function predict() {
+            var formData = new FormData(document.getElementById('upload-form'));
+
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.error) {
+                        $('#result').html('<p style="color: red;">Error: ' + data.error + '</p>');
+                        $('#image-preview').hide();
+                    } else {
+                        $('#result').html('<p style="color: green;">Prediction: ' + data.result + '</p>');
+                        $('#image-preview').attr('src', URL.createObjectURL($('#file-input')[0].files[0])).show();
+                    }
+                },
+                error: function () {
+                    $('#result').html('<p style="color: red;">An error occurred during the prediction.</p>');
+                    $('#image-preview').hide();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+ 
+
+
+
+
+
+
+
